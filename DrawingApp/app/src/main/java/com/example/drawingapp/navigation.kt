@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.drawingapp.view.CanvasScreen
+import com.example.drawingapp.view.PenScreen
 import com.example.drawingapp.view.SplashScreen
 
 @Composable
@@ -25,7 +26,7 @@ fun MyAppNav(
         }
 
         composable("penScreen") {
-            CanvasScreen(myNavController)
+            PenScreen(myNavController)
         }
     }
 }
