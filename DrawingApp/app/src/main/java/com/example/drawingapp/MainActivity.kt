@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
 
                 MyAppNav(
                     myNavController = navCon,
-                    startDestination = "canvasScreen"
+                    startDestination = "splashScreen"
                 )
             }
         }
