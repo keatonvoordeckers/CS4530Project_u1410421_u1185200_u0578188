@@ -11,6 +11,7 @@ import com.example.drawingapp.view.SplashScreen
 @Composable
 fun MyAppNav(
     myNavController: NavHostController,
+    drawingVM: DrawingViewModel,
     startDestination: String = "splashScreen"
 ) {
     NavHost(
@@ -22,11 +23,11 @@ fun MyAppNav(
         }
 
         composable("canvasScreen") {
-            CanvasScreen(myNavController)
+            CanvasScreen(myNavController, drawingVM)
         }
 
         composable("penScreen") {
-            PenScreen(myNavController)
+            PenScreen(myNavController, drawingVM)
         }
     }
 }
