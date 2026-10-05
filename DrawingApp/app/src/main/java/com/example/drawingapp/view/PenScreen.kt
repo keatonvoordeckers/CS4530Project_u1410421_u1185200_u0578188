@@ -22,7 +22,7 @@ import com.example.drawingapp.model.BrushType
 import com.example.drawingapp.viewmodel.DrawingViewModel
 
 @Composable
-fun PenScreen(myNavController: NavHostController, drawingVM: DrawingViewModel) {
+fun PenScreen(myNavController: NavHostController, drawingVM: DrawingViewModel, drawingID: Int) {
     val size by drawingVM.penSize.collectAsState()
     val color by drawingVM.penColor.collectAsState()
     val brush by drawingVM.penBrush.collectAsState()
@@ -74,7 +74,7 @@ fun PenScreen(myNavController: NavHostController, drawingVM: DrawingViewModel) {
             Button(onClick = { drawingVM.setPenBrush(BrushType.TRIANGLE) }) { Text("Triangle") }
         }
         Spacer(modifier = Modifier.padding(16.dp))
-        Button(onClick = { myNavController.navigate("canvasScreen") }) {
+        Button(onClick = { myNavController.navigate("canvasScreen/$drawingID") }) {
             Text("Canvas")
         }
     }

@@ -36,8 +36,16 @@ fun MyAppNav(
             }
         }
 
-        composable("penScreen") {
-            PenScreen(myNavController, drawingVM)
+        composable("penScreen/{drawingId}") { entry ->
+            val drawingId = entry.arguments
+                ?.getString("drawingId")
+                ?.toIntOrNull()
+
+            if (drawingId != null) {
+                PenScreen(myNavController, drawingVM, drawingId)
+            } else {
+                Text("Missing or invalid drawing ID")
+            }
         }
     }
 }

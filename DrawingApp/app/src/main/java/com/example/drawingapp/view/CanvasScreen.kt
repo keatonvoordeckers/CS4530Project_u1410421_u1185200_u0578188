@@ -33,7 +33,7 @@ fun CanvasScreen(myNavController : NavHostController, drawingVM: DrawingViewMode
 
         Text("Canvas Screen")
 
-        Button(onClick = {myNavController.navigate("PenScreen")}){
+        Button(onClick = {myNavController.navigate("PenScreen/$drawingID")}){
             Text("Pen")
         }
 
