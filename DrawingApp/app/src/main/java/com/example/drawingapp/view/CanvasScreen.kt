@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -58,6 +59,7 @@ fun DrawingCanvas(viewModel: DrawingViewModel, drawingId: Int) {
         modifier = Modifier
             .size(300.dp)
             .background(Color.LightGray)
+            .clipToBounds() // Prevent drawing outside of bounds
             .pointerInput(viewModel, drawingId) {
                 // Stroke ID for tracking undo eventually
                 var strokeId = viewModel.points.value
