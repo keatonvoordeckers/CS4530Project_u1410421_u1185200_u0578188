@@ -18,10 +18,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.drawingapp.model.BrushType
 import com.example.drawingapp.viewmodel.DrawingViewModel
 
 @Composable
@@ -36,63 +38,99 @@ fun CanvasScreen(myNavController : NavHostController, drawingVM: DrawingViewMode
         }
 
         DrawingCanvas(drawingVM, drawingID)
+
+        Button(onClick = {
+            drawingVM.addDrawing("Untitled") { id ->
+                myNavController.navigate("canvasScreen/$id")
+            }
+        }) {
+            Text("Start Drawing")
+        }
     }
 }
 
+// Adapted from DrawingCanvas from DrawingDemoV2
 @Composable
-fun DrawingCanvas(viewModel: DrawingViewModel, id: Int){
+fun DrawingCanvas(viewModel: DrawingViewModel, drawingId: Int) {
     val points by viewModel.points.collectAsState()
-
-    Canvas(modifier = Modifier
-        .size(300.dp)
-        .background(Color.LightGray)
-        ){
-    }
-}
-
-// Ripped directly from DrawingDemoV2
-@Composable
-fun DrawingCanvasPoints() {
-    var strokes by remember { mutableStateOf(listOf<List<Offset>>()) }
-    var currentStroke by remember { mutableStateOf(listOf<Offset>()) }
 
     Canvas(
         modifier = Modifier
-            .fillMaxSize()
-            //We capture touch input with
-            // pointerInput and detectDragGestures.
-            .pointerInput(Unit) {
+            .size(300.dp)
+            .background(Color.LightGray)
+            .pointerInput(viewModel, drawingId) {
+                // Stroke ID for tracking undo eventually
+                var strokeId = viewModel.points.value
+                    .maxOfOrNull { it.strokeId } ?: 0
+
                 detectDragGestures(
                     onDragStart = { offset ->
-                        currentStroke = listOf(offset)
-                        //if you update current stroke live here not on DragEnd,
-                        // then you do not need a second loop
-                        strokes = strokes + listOf(currentStroke)
+                        // Start a new stroke
+                        strokeId++
+                        viewModel.addPoint(drawingId, strokeId, offset.x, offset.y)
                     },
-                    onDrag = { change, x ->
+                    onDrag = { change, _ ->
                         change.consume()
-                        currentStroke = currentStroke + change.position
-                        //if you update current stroke live here not on DragEnd,
-                        // then you do not need a second loop
-                        strokes = strokes.dropLast(1) + listOf(currentStroke)
-                    },
-                    onDragEnd = {
-                        //strokes = strokes + listOf(currentStroke)
-                        currentStroke = emptyList()
+                        // Add another point to the same stroke
+                        viewModel.addPoint(
+                            drawingId,
+                            strokeId,
+                            change.position.x,
+                            change.position.y
+                        )
                     }
                 )
             }
     ) {
-        // Draw all completed strokes
-        strokes.forEach { stroke ->
-            for (i in 0 until stroke.size - 1) {
-                drawLine(
-                    color = Color.Red,
-                    start = stroke[i],
-                    end = stroke[i + 1],
-                    strokeWidth = 8f
-                )
+        // Keep this drawing's points and group them into separate strokes.
+        val strokes = points
+            .filter { it.drawingId == drawingId }
+            .groupBy { it.strokeId }
+
+        // Loop through each stroke and its points, preparing each point's position, color, and
+        // half-size for drawing.
+        strokes.values.forEach { stroke ->
+            stroke.forEachIndexed { index, point ->
+                val position = Offset(point.x, point.y)
+                val color = Color(point.color)
+                val halfSize = point.size / 2f
+
+                when (point.brush) {
+                    BrushType.LINE -> {
+                        drawCircle(color, halfSize, position)
+
+                        if (index > 0) {
+                            val previous = stroke[index - 1]
+
+                            drawLine(
+                                color = color,
+                                start = Offset(previous.x, previous.y),
+                                end = position,
+                                strokeWidth = point.size
+                            )
+                        }
+                    }
+
+                    BrushType.CIRCLE -> {
+                        drawCircle(color, halfSize, position)
+                    }
+
+                    BrushType.RECTANGLE -> {
+                        drawRect(
+                            color = color,
+                            topLeft = Offset(
+                                point.x - halfSize,
+                                point.y - halfSize
+                            ),
+                            size = Size(point.size, point.size)
+                        )
+                    }
+
+                    BrushType.TRIANGLE -> {
+                        // I'm not sure how to implement triangle brush
+                        }
+                    }
+                }
             }
         }
     }
-}

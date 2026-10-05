@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.viewModelScope
 
 class DrawingViewModel(private val drawingRepository: DrawingRepository) : ViewModel() {
     val penSize = MutableStateFlow(10.0f)
@@ -28,8 +29,12 @@ class DrawingViewModel(private val drawingRepository: DrawingRepository) : ViewM
     )
     val points = MutableStateFlow<List<PointData>>(emptyList())
 
-    fun addDrawing(title: String) {
-        drawingRepository.addDrawing(title)
+    fun addDrawing(title: String, onCreated: (Int) -> Unit) {
+        viewModelScope.launch {
+            val drawingId = drawingRepository.addDrawing(title)
+            points.value = emptyList()
+            onCreated(drawingId)
+        }
     }
 
     fun deleteDrawing(drawing: DrawingData) {
