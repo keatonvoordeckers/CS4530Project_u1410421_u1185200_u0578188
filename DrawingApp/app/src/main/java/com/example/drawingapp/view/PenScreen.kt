@@ -18,8 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.drawingapp.BrushType
-import com.example.drawingapp.DrawingViewModel
+import com.example.drawingapp.model.BrushType
+import com.example.drawingapp.viewmodel.DrawingViewModel
 
 @Composable
 fun PenScreen(myNavController: NavHostController, drawingVM: DrawingViewModel) {

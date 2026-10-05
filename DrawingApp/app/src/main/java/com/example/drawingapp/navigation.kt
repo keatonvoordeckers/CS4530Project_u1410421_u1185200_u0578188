@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.example.drawingapp.view.CanvasScreen
 import com.example.drawingapp.view.PenScreen
 import com.example.drawingapp.view.SplashScreen
+import com.example.drawingapp.viewmodel.DrawingViewModel
 
 @Composable
 fun MyAppNav(

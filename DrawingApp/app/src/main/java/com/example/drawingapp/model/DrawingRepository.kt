@@ -1,8 +1,8 @@
-package com.example.drawingapp
+package com.example.drawingapp.model
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.lang.System.currentTimeMillis
 
 class DrawingRepository(val scope: CoroutineScope, private val drawingDao: DrawingDao) {
     val allDrawings: Flow<List<DrawingData>> = drawingDao.getAllDrawings()
@@ -11,7 +11,7 @@ class DrawingRepository(val scope: CoroutineScope, private val drawingDao: Drawi
         scope.launch {
             val drawingObj = DrawingData(
                 title = title,
-                updatedAt = currentTimeMillis()
+                updatedAt = System.currentTimeMillis()
             )
             drawingDao.addDrawing(drawingObj)
         }

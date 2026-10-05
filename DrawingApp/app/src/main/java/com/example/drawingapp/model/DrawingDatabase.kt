@@ -1,4 +1,4 @@
-package com.example.drawingapp
+package com.example.drawingapp.model
 
 import androidx.room.Dao
 import androidx.room.Database

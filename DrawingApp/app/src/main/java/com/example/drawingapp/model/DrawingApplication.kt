@@ -1,4 +1,4 @@
-package com.example.drawingapp
+package com.example.drawingapp.model
 
 import android.app.Application
 import androidx.room.Room

@@ -1,15 +1,21 @@
-package com.example.drawingapp
+package com.example.drawingapp.viewmodel
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.drawingapp.model.BrushType
+import com.example.drawingapp.model.DrawingApplication
+import com.example.drawingapp.model.DrawingData
+import com.example.drawingapp.model.DrawingRepository
+import com.example.drawingapp.model.PointData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import androidx.compose.ui.graphics.toArgb
 
 class DrawingViewModel(private val drawingRepository: DrawingRepository) : ViewModel() {
     val penSize = MutableStateFlow(10.0f)
@@ -39,6 +45,21 @@ class DrawingViewModel(private val drawingRepository: DrawingRepository) : ViewM
     fun addPoints(newPoints: List<PointData>) {
         points.value += newPoints
         drawingRepository.addPoints(newPoints)
+    }
+
+    // LINE brush drawing
+    fun addPoint(drawingId: Int, strokeId: Int, x: Float, y: Float) {
+        val point = PointData(
+            drawingId = drawingId,
+            strokeId = strokeId,
+            x = x,
+            y = y,
+            color = penColor.value.toArgb(), // converts Compose Color to Int that PointData stores
+            size = penSize.value,
+            brush = BrushType.LINE
+        )
+
+        addPoints(listOf(point))
     }
 
     fun deletePoints(oldPoints: List<PointData>) {
