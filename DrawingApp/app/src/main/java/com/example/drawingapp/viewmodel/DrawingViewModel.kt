@@ -47,19 +47,21 @@ class DrawingViewModel(private val drawingRepository: DrawingRepository) : ViewM
         drawingRepository.addPoints(newPoints)
     }
 
-    // LINE brush drawing
+    // Draw with selected color, size and brush type
     fun addPoint(drawingId: Int, strokeId: Int, x: Float, y: Float) {
-        val point = PointData(
-            drawingId = drawingId,
-            strokeId = strokeId,
-            x = x,
-            y = y,
-            color = penColor.value.toArgb(), // converts Compose Color to Int that PointData stores
-            size = penSize.value,
-            brush = BrushType.LINE
+        addPoints(
+            listOf(
+                PointData(
+                    drawingId = drawingId,
+                    strokeId = strokeId,
+                    x = x,
+                    y = y,
+                    color = penColor.value.toArgb(),
+                    size = penSize.value,
+                    brush = penBrush.value
+                )
+            )
         )
-
-        addPoints(listOf(point))
     }
 
     fun deletePoints(oldPoints: List<PointData>) {
