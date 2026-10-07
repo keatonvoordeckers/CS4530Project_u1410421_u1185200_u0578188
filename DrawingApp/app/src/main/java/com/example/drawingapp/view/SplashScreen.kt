@@ -13,12 +13,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import com.example.drawingapp.viewmodel.DrawingViewModel
 import kotlinx.coroutines.delay
 import kotlin.concurrent.timer
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun SplashScreen(myNavController : NavHostController) {
+fun SplashScreen(myNavController : NavHostController, drawingVM : DrawingViewModel) {
 
     Column(modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
@@ -36,7 +37,9 @@ fun SplashScreen(myNavController : NavHostController) {
             secondsLeft--
         }
         // When timer finishes, navigate to canvas screen
-        myNavController.navigate("CanvasScreen")
+        drawingVM.addDrawing("Untitled") { id ->
+            myNavController.navigate("canvasScreen/$id")
+        }
     }
 }
 
