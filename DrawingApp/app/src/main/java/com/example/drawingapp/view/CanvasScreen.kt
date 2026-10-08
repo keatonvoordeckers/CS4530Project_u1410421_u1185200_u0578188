@@ -22,6 +22,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.drawingapp.model.BrushType
@@ -32,7 +33,10 @@ fun CanvasScreen(myNavController : NavHostController, drawingVM: DrawingViewMode
     Column(modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text("Canvas Screen")
+        Text(
+            "Canvas Screen",
+            modifier = Modifier.testTag("canvas_screen")
+        )
 
         Button(onClick = {myNavController.navigate("PenScreen/$drawingID")}){
             Text("Pen")
