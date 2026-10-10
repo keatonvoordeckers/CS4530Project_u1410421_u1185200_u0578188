@@ -32,14 +32,10 @@ fun SplashScreen(myNavController : NavHostController, drawingVM : DrawingViewMod
 
     }
 
-    var secondsLeft by remember { mutableStateOf(3) }
-
     // Referenced from slide 16 in Lecture 8
     LaunchedEffect(Unit) {
-        while (secondsLeft > 0) {
-            delay(1000.milliseconds) // Wait 1 second
-            secondsLeft--
-        }
+        delay(3000.milliseconds)
+
         // When timer finishes, navigate to canvas screen
         drawingVM.addDrawing("Untitled") { id ->
             myNavController.navigate("canvasScreen/$id")

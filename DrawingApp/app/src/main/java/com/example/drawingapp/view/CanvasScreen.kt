@@ -4,8 +4,11 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -61,7 +64,9 @@ fun DrawingCanvas(viewModel: DrawingViewModel, drawingId: Int) {
 
     Canvas(
         modifier = Modifier
-            .size(300.dp)
+            .padding(16.dp)
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f)
             .background(Color.LightGray)
             .clipToBounds() // Prevent drawing outside of bounds
             .pointerInput(viewModel, drawingId) {

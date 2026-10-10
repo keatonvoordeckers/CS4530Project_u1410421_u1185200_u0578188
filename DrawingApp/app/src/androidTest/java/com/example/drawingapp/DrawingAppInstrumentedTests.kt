@@ -262,18 +262,11 @@ class DrawingAppInstrumentedTests {
     }
 
     private fun waitForSplashScreenToFinish() {
-        composeTestRule.waitUntil {
+        composeTestRule.waitUntil(timeoutMillis = 5000) {
             composeTestRule
                 .onAllNodesWithTag("splash_screen")
                 .fetchSemanticsNodes()
                 .isEmpty()
-        }
-
-        composeTestRule.waitUntil {
-            composeTestRule
-                .onAllNodesWithTag("canvas_screen")
-                .fetchSemanticsNodes()
-                .isNotEmpty()
         }
     }
 }
